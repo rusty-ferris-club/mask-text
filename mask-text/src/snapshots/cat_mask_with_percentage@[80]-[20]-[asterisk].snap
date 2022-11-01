@@ -2,4 +2,4 @@
 source: mask-text/src/mask.rs
 expression: "Kind::Percentage(text, percentage, min_chars, mask_char).mask()"
 ---
-"tex........."
+"************"

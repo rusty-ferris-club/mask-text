@@ -168,7 +168,12 @@ mod test_mask {
     ) {
         let text = "text to mask";
 
-        set_snapshot_suffix!("[{}]-[{}]-[{}]", percentage, min_chars, mask_char);
+        set_snapshot_suffix!(
+            "[{}]-[{}]-[{}]",
+            percentage,
+            min_chars,
+            mask_char.replace('*', "asterisk")
+        );
 
         assert_debug_snapshot!(Kind::Percentage(text, percentage, min_chars, mask_char,).mask());
     }
@@ -180,7 +185,12 @@ mod test_mask {
     fn cat_mask_with_regex(#[case] re: &str, #[case] group: usize, #[case] mask_char: &str) {
         let text = "text to mask on group";
 
-        set_snapshot_suffix!("[{}]-[{}]-[{}]", re, group, mask_char);
+        set_snapshot_suffix!(
+            "[{}]-[{}]-[{}]",
+            re.replace('*', "asterisk"),
+            group,
+            mask_char.replace('*', "asterisk")
+        );
 
         let re = Regex::new(re).unwrap();
         assert_debug_snapshot!(Kind::Regex(text, re, group, mask_char).mask());
@@ -192,7 +202,7 @@ mod test_mask {
     fn cat_mask_with_prefix(#[case] until: usize, #[case] mask_char: &str) {
         let text = "text to mask";
 
-        set_snapshot_suffix!("[{}]-[{}]", until, mask_char);
+        set_snapshot_suffix!("[{}]-[{}]", until, mask_char.replace('*', "asterisk"));
 
         assert_debug_snapshot!(Kind::Prefix(text, until, mask_char).mask());
     }
