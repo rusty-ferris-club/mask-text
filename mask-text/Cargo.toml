@@ -1,0 +1,23 @@
+
+[package]
+name = "mask-text"
+version = "0.1.0"
+edition = "2021"
+authors = ["Elad Kaplan <kaplan.elad@gmail.com>"]
+license = "Apache-2.0"
+description = "This is a library to mask text with multiple masking options"
+homepage = "https://github.com/rusty-ferris-club/mask-text"
+repository = "https://github.com/rusty-ferris-club/mask-text"
+documentation = "https://docs.rs/mask-text/latest/mask-text"
+readme = "../README.md"
+keywords = ["mask-text", "mask"]
+
+[lib]
+name = "mask_text"
+
+[dependencies]
+regex = "1.6.0"
+
+[dev-dependencies]
+insta = { version = "1.17.2", features = ["filters"] }
+rstest = "0.15.0"

@@ -1,0 +1,5 @@
+---
+source: mask-text/src/mask.rs
+expression: masked_text
+---
+"tex........."

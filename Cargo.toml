@@ -1,0 +1,2 @@
+[workspace]
+members = ["mask-text", "xtask"]
