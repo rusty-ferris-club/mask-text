@@ -23,7 +23,7 @@ use mask_text::mask;
 
 fn main() {
     // masking 80% of the given text. minimum masking chars should bigger then 3.
-    let percentage_result =mask::Kind::Percentage("text to mask", 80, 3, "*").mask();
+    let percentage_result = mask::Kind::Percentage("text to mask", 80, 3, "*").mask();
 
     // masking text by regex group.
     let re = Regex::new("([a-z].*) (mask) ([a-z].*)").unwrap();
