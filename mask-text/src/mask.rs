@@ -6,6 +6,8 @@
 #![doc = include_str!("../examples/percentage.rs")]
 //! ```
 use regex::Regex;
+
+#[derive(Debug)]
 pub enum Kind {
     Percentage(String, u8, usize, String),
     Regex(String, Regex, usize, String),
@@ -34,8 +36,7 @@ impl Kind {
 /// # Example
 ///
 /// ```rust
-/// use mask_text::mask;
-/// let masked_text = mask::Kind::Percentage("text to mask".to_string(), 80, 3, "*".to_string()).mask();
+/// let masked_text = mask_text::Kind::Percentage("text to mask".to_string(), 80, 3, "*".to_string()).mask();
 /// ```
 ///
 /// Arguments:
@@ -64,10 +65,9 @@ fn with_percentage(text: String, percentage: u8, min_chars: usize, mask_char: St
 /// # Example
 ///
 /// ```rust
-/// use mask_text::mask;
 /// use regex::Regex;
 /// let re = Regex::new("([a-z].*) (mask) ([a-z].*)").unwrap();
-/// let masked_text = mask::Kind::Regex("text to mask on group".to_string(), re, 2, "*".to_string()).mask();
+/// let masked_text = mask_text::Kind::Regex("text to mask on group".to_string(), re, 2, "*".to_string()).mask();
 /// ```
 ///
 /// Arguments:
@@ -90,8 +90,7 @@ fn with_regex(text: String, re: Regex, group: usize, mask_char: String) -> Strin
 /// # Example
 ///
 /// ```rust
-/// use mask_text::mask;
-/// let masked_text = mask::Kind::Prefix("text to mask".to_string(), 3, "*".to_string()).mask();
+/// let masked_text = mask_text::Kind::Prefix("text to mask".to_string(), 3, "*".to_string()).mask();
 /// ```
 ///
 /// Arguments:
@@ -109,8 +108,7 @@ fn with_prefix(text: String, until: usize, mask_char: String) -> String {
 /// # Example
 ///
 /// ```rust
-/// use mask_text::mask;
-/// let masked_text = mask::Kind::All("text to mask".to_string(), "*".to_string()).mask();
+/// let masked_text = mask_text::Kind::All("text to mask".to_string(), "*".to_string()).mask();
 /// ```
 ///
 /// Arguments:

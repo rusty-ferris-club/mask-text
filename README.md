@@ -19,21 +19,20 @@ mask-text = { version = "0.1.1" }
 
 ## Examples
 ```rs
-use mask_text::mask;
 
 fn main() {
     // masking 80% of the given text. minimum masking chars should bigger then 3.
-    let percentage_result = mask::Kind::Percentage("text to mask".to_string(), 80, 3, "*".to_string()).mask();
+    let percentage_result = mask_text::Kind::Percentage("text to mask".to_string(), 80, 3, "*".to_string()).mask();
 
     // masking text by regex group.
     let re = Regex::new("([a-z].*) (mask) ([a-z].*)").unwrap();
-    let regex_result = mask::Kind::Regex("text to mask on group".to_string(), re, 2, "*".to_string()).mask();
+    let regex_result = mask_text::Kind::Regex("text to mask on group".to_string(), re, 2, "*".to_string()).mask();
     
     // masking 3 first chars from the string.
-    let prefix_result = mask::Kind::Prefix("text to mask".to_string(), 3, "*".to_string()).mask();
+    let prefix_result = mask_text::Kind::Prefix("text to mask".to_string(), 3, "*".to_string()).mask();
 
     // masking all chars.
-    let all_result = mask::Kind::All("text to mask".to_string(), "*".to_string()).mask()
+    let all_result = mask_text::Kind::All("text to mask".to_string(), "*".to_string()).mask()
 }
 ```
 
