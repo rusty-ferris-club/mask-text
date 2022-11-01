@@ -8,7 +8,7 @@ This is a library to mask text with multiple masking options
 ## Usage 
 ```toml
 [dependencies]
-mask-text = { version = "0.1.1" }
+mask-text = { version = "0.1.2" }
 ```
 
 ## Mask Options
