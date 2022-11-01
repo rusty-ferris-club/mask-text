@@ -87,12 +87,6 @@ jobs:
           command: xtask
           args: test
 
-      - name: Run test with github feature flag on
-        uses: actions-rs/cargo@v1
-        with:
-          command: xtask
-          args: test -- --features github
-
   clippy:
     name: clippy
     runs-on: ubuntu-latest
