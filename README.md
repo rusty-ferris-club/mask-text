@@ -11,7 +11,7 @@ This is a library to mask text with multiple masking options
 mask-text = { version = "0.1.0" }
 ```
 
-# Mask Options
+## Mask Options
 * Percentage
 * Regex
 * Prefix
