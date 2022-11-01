@@ -1,8 +1,6 @@
-use mask_text::mask;
-
 fn main() {
     println!(
         "{}",
-        mask::Kind::All("text to mask".to_string(), "*".to_string()).mask()
+        mask_text::Kind::All("text to mask".to_string(), "*".to_string()).mask()
     );
 }
