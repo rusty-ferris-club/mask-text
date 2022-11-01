@@ -1,0 +1,5 @@
+---
+source: mask-text/src/mask.rs
+expression: "Kind::Prefix(text, until, mask_char).mask()"
+---
+"************"

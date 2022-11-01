@@ -1,5 +1,5 @@
 ---
 source: mask-text/src/mask.rs
-expression: masked_text
+expression: "Kind::Regex(text, re, group, mask_char).mask()"
 ---
 "text to **** on group"
