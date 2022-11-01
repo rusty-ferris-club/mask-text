@@ -6,14 +6,14 @@
 #![doc = include_str!("../examples/percentage.rs")]
 //! ```
 use regex::Regex;
-pub enum Kind<'a> {
-    Percentage(&'a str, u8, usize, &'a str),
-    Regex(&'a str, Regex, usize, &'a str),
-    Prefix(&'a str, usize, &'a str),
-    All(&'a str, &'a str),
+pub enum Kind {
+    Percentage(String, u8, usize, String),
+    Regex(String, Regex, usize, String),
+    Prefix(String, usize, String),
+    All(String, String),
 }
 
-impl Kind<'_> {
+impl Kind {
     #[must_use]
     pub fn mask(self) -> String {
         match self {
@@ -35,7 +35,7 @@ impl Kind<'_> {
 ///
 /// ```rust
 /// use mask_text::mask;
-/// let masked_text = mask::Kind::Percentage("text to mask", 80, 3, "*").mask();
+/// let masked_text = mask::Kind::Percentage("text to mask".to_string(), 80, 3, "*".to_string()).mask();
 /// ```
 ///
 /// Arguments:
@@ -45,7 +45,7 @@ impl Kind<'_> {
 ///   the text length is lower from the given text all the text will mask.
 /// * `mask_char` - Mask char.
 #[must_use]
-fn with_percentage(text: &str, percentage: u8, min_chars: usize, mask_char: &str) -> String {
+fn with_percentage(text: String, percentage: u8, min_chars: usize, mask_char: String) -> String {
     #[allow(clippy::cast_sign_loss)]
     #[allow(clippy::cast_possible_truncation)]
     #[allow(clippy::cast_precision_loss)]
@@ -67,7 +67,7 @@ fn with_percentage(text: &str, percentage: u8, min_chars: usize, mask_char: &str
 /// use mask_text::mask;
 /// use regex::Regex;
 /// let re = Regex::new("([a-z].*) (mask) ([a-z].*)").unwrap();
-/// let masked_text = mask::Kind::Regex("text to mask on group", re, 2, "*").mask();
+/// let masked_text = mask::Kind::Regex("text to mask on group".to_string(), re, 2, "*".to_string()).mask();
 /// ```
 ///
 /// Arguments:
@@ -76,13 +76,13 @@ fn with_percentage(text: &str, percentage: u8, min_chars: usize, mask_char: &str
 /// * `group` - Mask regex group.
 /// * `mask_char` - Mask char.
 #[must_use]
-fn with_regex(text: &str, re: Regex, group: usize, mask_char: &str) -> String {
+fn with_regex(text: String, re: Regex, group: usize, mask_char: String) -> String {
     let cap_text = re
-        .captures(text)
+        .captures(&text)
         .and_then(|f| f.get(group))
-        .map_or(text, |m| m.as_str());
+        .map_or(text.as_str(), |m| m.as_str());
 
-    text.replace(cap_text, &mask(cap_text, 0, mask_char))
+    text.replace(cap_text, &mask(cap_text.to_string(), 0, mask_char))
 }
 
 /// Mask string from prefix.
@@ -91,7 +91,7 @@ fn with_regex(text: &str, re: Regex, group: usize, mask_char: &str) -> String {
 ///
 /// ```rust
 /// use mask_text::mask;
-/// let masked_text = mask::Kind::Prefix("text to mask", 3, "*").mask();
+/// let masked_text = mask::Kind::Prefix("text to mask".to_string(), 3, "*".to_string()).mask();
 /// ```
 ///
 /// Arguments:
@@ -99,7 +99,7 @@ fn with_regex(text: &str, re: Regex, group: usize, mask_char: &str) -> String {
 /// * `until` - Mask chats from the start until the given number.
 /// * `mask_char` - Mask char.
 #[must_use]
-fn with_prefix(text: &str, until: usize, mask_char: &str) -> String {
+fn with_prefix(text: String, until: usize, mask_char: String) -> String {
     let until = if until >= text.len() { 0 } else { until };
     mask(text, until, mask_char)
 }
@@ -110,18 +110,18 @@ fn with_prefix(text: &str, until: usize, mask_char: &str) -> String {
 ///
 /// ```rust
 /// use mask_text::mask;
-/// let masked_text = mask::Kind::All("text to mask", "*").mask();
+/// let masked_text = mask::Kind::All("text to mask".to_string(), "*".to_string()).mask();
 /// ```
 ///
 /// Arguments:
 /// * `text` - Text to mask.
 /// * `mask_char` - Mask char.
 #[must_use]
-fn all(text: &str, mask_char: &str) -> String {
+fn all(text: String, mask_char: String) -> String {
     mask(text, 0, mask_char)
 }
 
-fn mask(str: &str, from: usize, mask_char: &str) -> String {
+fn mask(str: String, from: usize, mask_char: String) -> String {
     str.chars()
         .enumerate()
         .map(|(i, c)| {
@@ -164,9 +164,9 @@ mod test_mask {
     fn cat_mask_with_percentage(
         #[case] percentage: u8,
         #[case] min_chars: usize,
-        #[case] mask_char: &str,
+        #[case] mask_char: String,
     ) {
-        let text = "text to mask";
+        let text = "text to mask".to_string();
 
         set_snapshot_suffix!(
             "[{}]-[{}]-[{}]",
@@ -182,8 +182,8 @@ mod test_mask {
     #[case("([a-z].*) (mask) ([a-z].*)", 2, "*")]
     #[case("([a-z].*) (mask) ([a-z].*)", 3, "*")]
     #[case("([a-z].*) (mask) ([a-z].*)", 1, ".")]
-    fn cat_mask_with_regex(#[case] re: &str, #[case] group: usize, #[case] mask_char: &str) {
-        let text = "text to mask on group";
+    fn cat_mask_with_regex(#[case] re: &str, #[case] group: usize, #[case] mask_char: String) {
+        let text = "text to mask on group".to_string();
 
         set_snapshot_suffix!(
             "[{}]-[{}]-[{}]",
@@ -199,8 +199,8 @@ mod test_mask {
     #[rstest]
     #[case(3, "*")]
     #[case(200, "*")]
-    fn cat_mask_with_prefix(#[case] until: usize, #[case] mask_char: &str) {
-        let text = "text to mask";
+    fn cat_mask_with_prefix(#[case] until: usize, #[case] mask_char: String) {
+        let text = "text to mask".to_string();
 
         set_snapshot_suffix!("[{}]-[{}]", until, mask_char.replace('*', "asterisk"));
 
